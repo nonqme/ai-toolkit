@@ -1,11 +1,14 @@
 {
-  "name": "@kickstart-nodejs/typescript-template",
+  "name": "screenset",
   "version": "0.0.1",
   "description": "",
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/bin/cli.js",
+  "bin": {
+    "screenset": "./dist/bin/cli.js"
+  },
   "scripts": {
     "start": "node dist/index.js",
     "dev": "tsx --watch src/index.ts",
