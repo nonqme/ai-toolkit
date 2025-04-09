@@ -1,25 +1,25 @@
 #!/usr/bin/env node
 import sade from 'sade';
 
-import record, { type RecordOptions } from '../core/commands/record.js';
+import captureImage from '../commands/capture-image.js';
 
-const program = sade('screenset');
+const program = sade('ai');
 
-program
-  .version('0.0.1')
-  .describe('A CLI tool to create / manage screenshot datasets');
+program.version('0.0.1').describe('An AI CLI for various tasks');
 
 program
-  .command('record')
-  .describe('Record a screenshot dataset')
-  .option('--name, -n', 'Name of the dataset')
-  .option('--fps, -f', 'Capture frequency in frames per second')
-  .option('--window, -w', 'Window name to capture')
-  .option('--output, -o', 'Output directory for the dataset')
-  .action((options) => {
-    const { name, fps, window, output } = options as RecordOptions;
-
-    record({ name, fps, window, output });
+  .command('capture-image')
+  .describe(
+    'Capture a set of images from the screen and save them to a directory'
+  )
+  .option('-n, --name', 'Name of the set')
+  .option('-w, --window', 'Window name to capture')
+  .action(async (options) => {
+    const { name, window } = options;
+    await captureImage({
+      name,
+      window,
+    });
   });
 
 program.parse(process.argv);
