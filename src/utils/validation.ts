@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 export const validateName = (name: string) => {
   name.trim();
   if (!name) {
@@ -29,6 +31,33 @@ export const validateWindowName = (windowName: string) => {
   }
   if (windowName.length > 50) {
     return 'Window name must be less than 50 characters';
+  }
+  return true;
+};
+
+export const validateFps = (fps: string) => {
+  fps = fps.trim();
+
+  if (!fps) {
+    return 'FPS is required';
+  }
+  if (!/^\d+$/.test(fps)) {
+    return 'FPS must be a positive integer';
+  }
+  if (parseInt(fps, 10) < 1) {
+    return 'FPS must be at least 1';
+  }
+  return true;
+};
+
+export const validateOutput = (output: string) => {
+  output = output.trim();
+
+  if (!output) {
+    return 'Output directory is required';
+  }
+  if (!path.isAbsolute(path.resolve(output))) {
+    return 'Output directory must be a valid path';
   }
   return true;
 };

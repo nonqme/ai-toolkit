@@ -14,11 +14,15 @@ program
   )
   .option('-n, --name', 'Name of the set')
   .option('-w, --window', 'Window name to capture')
+  .option('-f, --fps', 'Number of screenshots per second')
+  .option('-o, --output', 'Output directory for the captured images')
   .action(async (options) => {
-    const { name, window } = options;
+    const { name, window, fps, output } = options;
     await captureImage({
       name,
       window,
+      fps,
+      output,
     });
   });
 
