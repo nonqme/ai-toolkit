@@ -28,32 +28,44 @@ export default async function captureImage(captureOptions: CaptureOptions) {
   console.clear();
   let { name, window, fps, output } = captureOptions;
 
-  if (!name) name = await askForName();
-  const nameValidation = validateName(name);
-  if (nameValidation !== true) {
-    console.error(nameValidation);
-    return;
+  if (!name) {
+    name = await askForName();
+  } else {
+    const nameValidation = validateName(name);
+    if (nameValidation !== true) {
+      console.error(nameValidation);
+      return;
+    }
   }
 
-  if (!window) window = await askForWindow();
-  const windowValidation = validateWindowName(window);
-  if (windowValidation !== true) {
-    console.error(windowValidation);
-    return;
+  if (!window) {
+    window = await askForWindow();
+  } else {
+    const windowValidation = validateWindowName(window);
+    if (windowValidation !== true) {
+      console.error(windowValidation);
+      return;
+    }
   }
 
-  if (!fps) fps = await askForFps();
-  const fpsValidation = validateFps(fps);
-  if (fpsValidation !== true) {
-    console.error(fpsValidation);
-    return;
+  if (!fps) {
+    fps = await askForFps();
+  } else {
+    const fpsValidation = validateFps(fps);
+    if (fpsValidation !== true) {
+      console.error(fpsValidation);
+      return;
+    }
   }
 
-  if (!output) output = await askForOutput();
-  const outputValidation = validateOutput(output);
-  if (outputValidation !== true) {
-    console.error(outputValidation);
-    return;
+  if (!output) {
+    output = await askForOutput();
+  } else {
+    const outputValidation = validateOutput(output);
+    if (outputValidation !== true) {
+      console.error(outputValidation);
+      return;
+    }
   }
 
   console.log(`Starting capture for window: ${window}`);
