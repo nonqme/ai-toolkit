@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 
 import { activeWindow } from 'get-windows';
 import screenshotDesktop from 'screenshot-desktop';
@@ -25,7 +26,6 @@ export type CaptureOptions = {
 };
 
 export default async function captureImage(captureOptions: CaptureOptions) {
-  console.clear();
   let { name, window, fps, output } = captureOptions;
 
   if (!name) {
@@ -51,7 +51,7 @@ export default async function captureImage(captureOptions: CaptureOptions) {
   if (!fps) {
     fps = await askForFps();
   } else {
-    const fpsValidation = validateFps(fps);
+    const fpsValidation = validateFps(parseInt(fps));
     if (fpsValidation !== true) {
       console.error(fpsValidation);
       return;
@@ -70,13 +70,17 @@ export default async function captureImage(captureOptions: CaptureOptions) {
 
   console.log(`Starting capture for window: ${window}`);
   const interval = 1000 / parseInt(fps, 10);
+  console.log(`Capturing at ${fps} FPS (${interval} ms interval)`);
+  const outputDir = path.resolve(output);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
 
   while (true) {
     const activeWindowName = await activeWindow();
     if (activeWindowName?.owner.name.toLocaleLowerCase().includes(window)) {
       console.log(`Capturing screenshot from ${activeWindowName.owner.name}`);
       try {
-        const outputDir = path.resolve(output);
         const fileName = `${name}-${Date.now()}.png`;
         const filePath = path.join(outputDir, fileName);
         await screenshotDesktop({ filename: filePath });

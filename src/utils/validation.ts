@@ -35,16 +35,14 @@ export const validateWindowName = (windowName: string) => {
   return true;
 };
 
-export const validateFps = (fps: string) => {
-  fps = fps.trim();
-
+export const validateFps = (fps: number) => {
   if (!fps) {
     return 'FPS is required';
   }
-  if (!/^\d+$/.test(fps)) {
-    return 'FPS must be a positive integer';
+  if (isNaN(fps)) {
+    return 'FPS must be a number';
   }
-  if (parseInt(fps, 10) < 1) {
+  if (fps < 1) {
     return 'FPS must be at least 1';
   }
   return true;

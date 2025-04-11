@@ -33,7 +33,9 @@ export const askForFps = async () => {
     message: 'What is the number of screenshots per second?',
     required: true,
     transformer: inputTransformer,
-    validate: validateFps,
+    validate: (value: string) => {
+      return validateFps(parseInt(value));
+    },
     theme: inputTheme,
   });
 };
