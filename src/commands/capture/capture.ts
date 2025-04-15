@@ -1,11 +1,7 @@
 import path from 'node:path';
-import fs from 'node:fs';
-
-import { activeWindow } from 'get-windows';
-import screenshotDesktop from 'screenshot-desktop';
-import sharp from 'sharp';
 
 import { askName, askWindow, askFps, askOutput } from './capture-prompts.js';
+import { captureWindow, type OnUpdate } from '../../core/capture.js';
 
 export const capture = async (): Promise<void> => {
   const name = await askName();
@@ -13,24 +9,21 @@ export const capture = async (): Promise<void> => {
   const fps = parseInt(await askFps(), 10);
   const output = path.resolve(await askOutput());
 
-  if (!fs.existsSync(output)) {
-    fs.mkdirSync(output, { recursive: true });
-  }
-
-  while (true) {
-    const currentWindow = await activeWindow();
-    if (currentWindow && currentWindow.title.toLowerCase().includes(window)) {
-      const { x, y, width, height } = currentWindow.bounds;
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const fileName = path.join(output, `${name}-${timestamp}.png`);
-      const screen = await screenshotDesktop({ format: 'png' });
-      const croppedScreen = await sharp(screen)
-        .extract({ left: x, top: y, width, height })
-        .toBuffer();
-      fs.writeFileSync(fileName, croppedScreen);
+  const onUpdate = (update: OnUpdate): void => {
+    if (update.window) {
+      console.log(`Captured screenshot: ${update.fileName}`);
+      console.log(`Screenshot number: ${update.screenshots}`);
     } else {
-      console.log(`Window "${window}" not found. Waiting for it to appear...`);
+      console.log(update.message);
+      console.log(`Screenshots captured: ${update.screenshots}`);
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000 / fps));
-  }
+  };
+
+  await captureWindow({
+    name,
+    window,
+    fps,
+    output,
+    onUpdate,
+  });
 };
