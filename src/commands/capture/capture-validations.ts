@@ -39,8 +39,8 @@ export const isCaptureWindowValid = (window: string): true | string => {
     return 'Window name must be less than 50 characters long';
   }
 
-  if (!/^[a-zA-Z0-9-_]+$/.test(window)) {
-    return 'Window name can only contain letters, numbers, dashes, and underscores';
+  if (!/^[a-zA-Z0-9-_ ]+$/.test(window)) {
+    return 'Window name can only contain letters, numbers, dashes, spaces and underscores';
   }
 
   return true;
@@ -82,10 +82,6 @@ export const isCaptureOutputValid = (output: string): true | string => {
 
   if (output.length > 255) {
     return 'Output path must be less than 255 characters long';
-  }
-
-  if (!/^[a-zA-Z0-9-_\\/]+$/.test(output)) {
-    return 'Output path can only contain letters, numbers, dashes, underscores, and slashes';
   }
 
   return true;
