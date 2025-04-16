@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import sade from 'sade';
 
-import { capture } from '../commands/capture/capture.js';
+import { capture, normalize } from '../commands/index.js';
 
 const program = sade('ai');
 
@@ -14,6 +14,13 @@ program
   )
   .action(async () => {
     await capture();
+  });
+
+program
+  .command('normalize')
+  .describe('Normalize a set of images')
+  .action(async () => {
+    await normalize();
   });
 
 program.parse(process.argv);
