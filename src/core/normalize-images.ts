@@ -26,7 +26,7 @@ export const normalizeImages = async (
     const outputFilePath = path.join(output, file);
 
     await sharp(filePath)
-      .resize(width, height)
+      .resize(width, height, { fit: 'contain' })
       .normalise()
       .toFile(outputFilePath);
   }
