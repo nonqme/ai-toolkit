@@ -30,7 +30,16 @@ export const captureWindow = async (payload: CapturePayload): Promise<void> => {
   while (true) {
     const currentWindow = await activeWindow();
     if (currentWindow && currentWindow.title.toLowerCase().includes(window)) {
-      const { x, y, width, height } = currentWindow.bounds;
+      const { x, y, width, height } = (
+        currentWindow as {
+          contentBounds: {
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+          };
+        }
+      ).contentBounds;
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const fileName = path.join(output, `${name}-${timestamp}.png`);
       const screen = await screenshotDesktop({ format: 'png' });
