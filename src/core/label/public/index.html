@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 </head>
 
@@ -12,20 +12,18 @@
     <div id="current-image"></div>
 </body>
 <script>
-
     const getImages = async () => {
         const response = await fetch('http://localhost:3000/images');
         const data = await response.json();
         console.log(data);
         return data;
-    }
-
+    };
 
     const renderImages = async () => {
         const images = await getImages();
-        console.log(images)
+        console.log(images);
         const imagesList = document.getElementById('images');
-        images.forEach(url => {
+        images.forEach((url) => {
             const li = document.createElement('li');
             const imageElement = document.createElement('img');
             imageElement.src = `images/${url}`;
@@ -34,10 +32,9 @@
             imagesList.appendChild(li);
             li.appendChild(imageElement);
         });
-    }
+    };
 
     renderImages();
-
 </script>
 
 </html>
