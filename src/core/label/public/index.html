@@ -10,26 +10,84 @@
     <ul id="images"></ul>
     <div id="current-image"></div>
   </body>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #images {
+      position: absolute;
+      top: 0;
+      list-style: none;
+      padding: 0;
+      display: flex;
+      height: 250px;
+      width: 100%;
+      overflow-y: hidden;
+      opacity: 0;
+
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #images:hover {
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    #images li {
+      cursor: pointer;
+      margin: 0 5px;
+      height: 100%;
+    }
+    #images img {
+      border-radius: 5px;
+      height: 100%;
+      width: auto;
+      object-fit: fill;
+      transition: transform 0.2s;
+    }
+  </style>
   <script>
     const getImages = async () => {
       const response = await fetch('http://localhost:3000/images');
       const data = await response.json();
-      console.log(data);
       return data;
     };
 
     const renderImages = async () => {
       const images = await getImages();
-      console.log(images);
       const imagesList = document.getElementById('images');
+
+      const currentImage = document.getElementById('current-image');
+
+      const img = document.createElement('img');
+      img.src = `images/${images[0]}`;
+      img.style.width = '100%';
+      img.style.height = 'auto';
+      currentImage.appendChild(img);
+
       images.forEach((url) => {
         const li = document.createElement('li');
         const imageElement = document.createElement('img');
         imageElement.src = `images/${url}`;
-        imageElement.style.width = '100px';
-        imageElement.style.height = '100px';
         imagesList.appendChild(li);
         li.appendChild(imageElement);
+        li.addEventListener('mouseover', () => {
+          imageElement.style.transform = 'scale(1.1)';
+        });
+        li.addEventListener('mouseout', () => {
+          imageElement.style.transform = 'scale(1)';
+        });
+        li.addEventListener('click', () => {
+          const currentImage = document.getElementById('current-image');
+          currentImage.innerHTML = '';
+          const img = document.createElement('img');
+          img.src = `images/${url}`;
+          img.style.width = '100%';
+          img.style.height = 'auto';
+          currentImage.appendChild(img);
+        });
       });
     };
 
